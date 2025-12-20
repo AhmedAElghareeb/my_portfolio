@@ -21,7 +21,7 @@ class AboutSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "About Me",
+                'About Me',
                 style: theme.textTheme.displayMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.primaryColor,
@@ -35,7 +35,6 @@ class AboutSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 60),
-
               if (isDesktop)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,8 +104,7 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildStatsGrid() {
-    final highlights =
-        PortfolioData.aboutSection['highlights'] as List; // Safe cast
+    final highlights = PortfolioData.aboutSection['highlights'] as List;
 
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -121,7 +119,6 @@ class AboutSection extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = highlights[index] as Map<String, dynamic>;
         IconData? icon;
-        // Simple icon mapper
         switch (item['icon']) {
           case 'rocket':
             icon = Icons.rocket_launch;
@@ -140,25 +137,30 @@ class AboutSection extends StatelessWidget {
         }
 
         return GlassCard(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(icon, size: 32, color: AppColors.accentColor),
               const SizedBox(height: 12),
-              Text(
-                item['title'],
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              Expanded(
+                child: Text(
+                  item['title'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
-              Text(
-                item['desc'],
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-                textAlign: TextAlign.center,
+              Expanded(
+                child: Text(
+                  item['desc'],
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

@@ -145,6 +145,7 @@ class HeroSection extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color:
                                 isDark ? Colors.white : AppColors.primaryColor,
+                            height: 1.2,
                           ),
                         ),
                       ),

@@ -20,7 +20,6 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     'All',
     'Fintech',
     'Transportation',
-    'E-commerce',
   ];
 
   List<Project> get _filteredProjects {

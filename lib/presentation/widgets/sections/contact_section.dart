@@ -86,16 +86,16 @@ class _ContactSectionState extends State<ContactSection> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(child: _buildContactInfo(context)),
-                    const SizedBox(width: 60),
-                    Expanded(child: _buildContactForm(context)),
+                    // const SizedBox(width: 60),
+                    // Expanded(child: _buildContactForm(context)),
                   ],
                 )
               else
                 Column(
                   children: [
                     _buildContactInfo(context),
-                    const SizedBox(height: 60),
-                    _buildContactForm(context),
+                    // const SizedBox(height: 60),
+                    // _buildContactForm(context),
                   ],
                 ),
             ],
@@ -173,88 +173,88 @@ class _ContactSectionState extends State<ContactSection> {
     );
   }
 
-  Widget _buildContactForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          _buildTextField(
-            'Name',
-            controller: _nameController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your name';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            'Email',
-            controller: _emailController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!value.contains('@')) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            'Subject',
-            controller: _subjectController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a subject';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildTextField(
-            'Message',
-            maxLines: 5,
-            controller: _messageController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your message';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 24),
-          GradientButton(
-            text: 'Send Message',
-            icon: Icons.send,
-            width: double.infinity,
-            onPressed: _sendMessage,
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildContactForm(BuildContext context) {
+  //   return Form(
+  //     key: _formKey,
+  //     child: Column(
+  //       children: [
+  //         _buildTextField(
+  //           'Name',
+  //           controller: _nameController,
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter your name';
+  //             }
+  //             return null;
+  //           },
+  //         ),
+  //         const SizedBox(height: 16),
+  //         _buildTextField(
+  //           'Email',
+  //           controller: _emailController,
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter your email';
+  //             }
+  //             if (!value.contains('@')) {
+  //               return 'Please enter a valid email';
+  //             }
+  //             return null;
+  //           },
+  //         ),
+  //         const SizedBox(height: 16),
+  //         _buildTextField(
+  //           'Subject',
+  //           controller: _subjectController,
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter a subject';
+  //             }
+  //             return null;
+  //           },
+  //         ),
+  //         const SizedBox(height: 16),
+  //         _buildTextField(
+  //           'Message',
+  //           maxLines: 5,
+  //           controller: _messageController,
+  //           validator: (value) {
+  //             if (value == null || value.isEmpty) {
+  //               return 'Please enter your message';
+  //             }
+  //             return null;
+  //           },
+  //         ),
+  //         const SizedBox(height: 24),
+  //         GradientButton(
+  //           text: 'Send Message',
+  //           icon: Icons.send,
+  //           width: double.infinity,
+  //           onPressed: _sendMessage,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _buildTextField(
-    String label, {
-    int maxLines = 1,
-    required TextEditingController controller,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      maxLines: maxLines,
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-        alignLabelWithHint: true,
-      ),
-    );
-  }
+  // Widget _buildTextField(
+  //   String label, {
+  //   int maxLines = 1,
+  //   required TextEditingController controller,
+  //   String? Function(String?)? validator,
+  // }) {
+  //   return TextFormField(
+  //     controller: controller,
+  //     maxLines: maxLines,
+  //     validator: validator,
+  //     decoration: InputDecoration(
+  //       labelText: label,
+  //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+  //       filled: true,
+  //       alignLabelWithHint: true,
+  //     ),
+  //   );
+  // }
 }
 
 class FooterSection extends StatelessWidget {

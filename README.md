@@ -85,9 +85,9 @@ lib/
 
 **Ahmed Ashraf Elghareeb** - Flutter Developer
 
-- **LinkedIn**: [Ahmed Elghareeb](https://www.linkedin.com/in/ahmed-elghareeb-9a3a6b1b4/)
-- **Email**: ahmedalghareeb1122@gmail.com
-- **WhatsApp**: [+201015694295](https://wa.me/+201015694295)
+- **LinkedIn**: [Ahmed Elghareeb](https://www.linkedin.com/in/ahmed-elghareeb8/)
+- **Email**: ahmed.elghareeb1166@gmail.com
+- **WhatsApp**: [+201156750391](https://wa.me/+201156750391)
 
 ---
 *Built with 💙 using Flutter*

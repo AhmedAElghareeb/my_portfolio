@@ -142,7 +142,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
               color: Colors.grey.shade200, // Placeholder
               child: project.image != null
                   ? Center(
-                      child: Image.network(
+                      child: Image.asset(
                         project
                             .image!, // In real deploy use generic placeholder if asset missing
                         fit: BoxFit.cover,

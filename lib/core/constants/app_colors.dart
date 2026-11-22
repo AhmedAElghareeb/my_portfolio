@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
-  // Primary Theme Colors
-  static const primaryColor = Color(0xFF0553B1); // Flutter Blue
-  static const secondaryColor = Color(0xFF02569B); // Dark Blue
-  static const accentColor = Color(0xFF13B9FD); // Light Blue
-  static const gradientStart = Color(0xFF667EEA); // Purple
-  static const gradientEnd = Color(0xFF764BA2); // Magenta
+abstract final class AppColors {
+  static const darkBackground = Color(0xFF0D1118);
+  static const darkSurface = Color(0xFF141C28);
+  static const darkElevated = Color(0xFF1B2839);
+  static const darkText = Color(0xFFF2F5FA);
+  static const darkMuted = Color(0xFFACB9CD);
+  static const darkBorder = Color(0xFF344357);
+  static const darkControlBorder = Color(0xFF657892);
+  static const darkAccent = Color(0xFF8DDAFF);
 
-  // Dark Mode
-  static const darkBackground = Color(0xFF0A0E21);
-  static const darkSurface = Color(0xFF1D1E33);
-  static const darkCard = Color(0xFF111328);
-
-  // Light Mode
-  static const lightBackground = Color(0xFFF5F5F5);
+  static const lightBackground = Color(0xFFF3F6FB);
   static const lightSurface = Color(0xFFFFFFFF);
-
-  // Text Colors
-  static const white = Colors.white;
-  static const black = Colors.black;
-  static const grey = Colors.grey;
+  static const lightElevated = Color(0xFFE8F0FC);
+  static const lightText = Color(0xFF13243B);
+  static const lightMuted = Color(0xFF475B74);
+  static const lightBorder = Color(0xFFC2D0E1);
+  static const lightControlBorder = Color(0xFF71829B);
+  static const lightAccent = Color(0xFF075C9D);
 }

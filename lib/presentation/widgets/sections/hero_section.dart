@@ -1,205 +1,181 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:particles_flutter/particles_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../core/constants/app_colors.dart';
+
 import '../../../core/utils/responsive_helper.dart';
 import '../../../data/portfolio_data.dart';
-import '../common/gradient_button.dart';
-import '../common/social_button.dart';
+import '../common/glass_card.dart';
+import '../common/portfolio_ui.dart';
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  const HeroSection({
+    super.key,
+    required this.onExplore,
+    required this.onContact,
+  });
+
+  final VoidCallback onExplore;
+  final VoidCallback onContact;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isDesktop = ResponsiveHelper.isDesktop(context);
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return SizedBox(
-      height: size.height,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          // Background Particles
-          if (isDark)
-            CircularParticle(
-              height: size.height,
-              width: size.width,
-              isRandomColor: false,
-              particleColor: AppColors.primaryColor.withOpacity(0.3),
-              numberOfParticles: 100,
-              speedOfParticles: 1,
-              maxParticleSize: 4,
-              awayRadius: 100,
-              onTapAnimation: true,
-              connectDots: true,
-            ),
-
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Greeting
-                  Text(
-                    PortfolioData.heroSection['greeting'] as String,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.accentColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 600.ms)
-                      .slideY(begin: -0.2, end: 0),
-
-                  const SizedBox(height: 16),
-
-                  // Name
-                  Text(
-                    PortfolioData.heroSection['name'] as String,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.displayLarge?.copyWith(
-                      fontSize: isDesktop ? 64 : 40,
-                      fontWeight: FontWeight.bold,
-                      height: 1.1,
-                    ),
-                  ).animate().fadeIn(delay: 200.ms, duration: 600.ms).scale(),
-
-                  const SizedBox(height: 16),
-
-                  // Typewriter Titles
-                  SizedBox(
-                    height: 50,
-                    child: DefaultTextStyle(
-                      style: theme.textTheme.headlineSmall!.copyWith(
-                        fontSize: isDesktop ? 32 : 20,
-                        color: isDark ? Colors.white70 : Colors.black87,
-                      ),
-                      child: AnimatedTextKit(
-                        repeatForever: true,
-                        animatedTexts:
-                            (PortfolioData.heroSection['titles'] as List)
-                                .map(
-                                  (title) => TypewriterAnimatedText(
-                                    title,
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                )
-                                .toList(),
-                      ),
+    final colors = theme.colorScheme;
+    final viewport = MediaQuery.sizeOf(context);
+    final compact = viewport.width < PortfolioLayout.minFullWidth;
+    final gutter = PortfolioLayout.gutter(viewport.width);
+    final sectionSpace = PortfolioLayout.sectionSpace(viewport.width);
+    return SectionFrame(
+      lighting: const Alignment(.72, -.76),
+      padding: EdgeInsets.fromLTRB(
+        gutter,
+        viewport.height < PortfolioLayout.shortHeight ? 30 : sectionSpace,
+        gutter,
+        sectionSpace * .75,
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final split = constraints.maxWidth >= PortfolioLayout.split;
+          final headingSize = compact
+              ? (constraints.maxWidth * .12).clamp(28.0, 34.0)
+              : (constraints.maxWidth * .12).clamp(37.0, 76.0);
+          final intro = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Reveal(
+                immediate: true,
+                child: Label('FLUTTER / MOBILE DEVELOPER  ·  EGYPT'),
+              ),
+              const SizedBox(height: 20),
+              Reveal(
+                immediate: true,
+                order: 1,
+                child: Semantics(
+                  container: true,
+                  header: true,
+                  headingLevel: 1,
+                  child: WordFitText(
+                    compact ? 'Ahmed Elghareeb' : PortfolioData.name,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontSize: headingSize,
+                      height: 1.03,
+                      letterSpacing: split ? -4 : -1.6,
                     ),
                   ),
+                ),
+              ),
+              const SizedBox(height: 23),
+              Reveal(
+                immediate: true,
+                order: 2,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 580),
+                  child: Text(
+                    'I build and ship Flutter apps for iOS and Android, from digital wallets and ride-hailing to logistics and commerce. My work spans app architecture, service integration, and store releases.',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontSize: split ? 18 : 16,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              Reveal(
+                immediate: true,
+                order: 3,
+                travel: 0,
+                child: Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    FilledButton(
+                      onPressed: onExplore,
+                      child: const Text('Explore My Work'),
+                    ),
+                    OutlinedButton(
+                      onPressed: onContact,
+                      child: const Text('Get In Touch'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
 
-                  const SizedBox(height: 32),
-
-                  // Buttons
-                  Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    alignment: WrapAlignment.center,
+          final stats = Reveal(
+            immediate: true,
+            order: 2,
+            child: GlassCard(
+              padding: EdgeInsets.zero,
+              interactive: false,
+              child: CustomPaint(
+                painter: _GridPainter(colors.primary.withValues(alpha: .09)),
+                child: Padding(
+                  padding: EdgeInsets.all(split ? 28 : 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      GradientButton(
-                        text: 'Download CV',
-                        icon: Icons.download,
-                        onPressed: () async {
-                          final Uri cvUri = Uri.parse(
-                              'https://drive.google.com/file/d/185OsljMAsz4l-8mv_bNhj8omJc1IP4n5/view?usp=sharing');
-                          if (await canLaunchUrl(cvUri)) {
-                            await launchUrl(cvUri);
-                          } else {
-                            debugPrint('Could not launch CV url');
-                          }
-                        },
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          final uri = Uri.parse(
-                              PortfolioData.contactInfo.socialLinks.whatsapp);
-                          await launchUrl(uri);
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            color: AppColors.primaryColor,
-                            width: 2,
+                      for (final (index, (value, label))
+                          in PortfolioData.stats.indexed) ...[
+                        if (index > 0)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: Divider(height: 1),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 28,
-                            vertical: 16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          fixedSize: const Size.fromHeight(47),
-                        ),
-                        child: Text(
-                          'Contact Me',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                isDark ? Colors.white : AppColors.primaryColor,
-                            height: 1.2,
+                        Text(
+                          value,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontSize: split ? 38 : 30,
+                            color: colors.primary,
+                            height: 1.12,
+                            letterSpacing: -1.2,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 4),
+                        Text(label, style: theme.textTheme.bodyMedium),
+                      ],
                     ],
-                  ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.2, end: 0),
-
-                  const SizedBox(height: 48),
-
-                  // Social Icons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SocialButton(
-                        icon: FontAwesomeIcons.github,
-                        url: PortfolioData.contactInfo.socialLinks.github,
-                      ),
-                      SocialButton(
-                        icon: FontAwesomeIcons.linkedin,
-                        url: PortfolioData.contactInfo.socialLinks.linkedin,
-                      ),
-                      SocialButton(
-                        icon: FontAwesomeIcons.whatsapp,
-                        url: PortfolioData.contactInfo.socialLinks.whatsapp,
-                      ),
-                    ],
-                  ).animate().fadeIn(delay: 800.ms),
-                ],
+                  ),
+                ),
               ),
             ),
-          ),
+          );
 
-          // Scroll Indicator
-          Positioned(
-            bottom: 40,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Column(
-                children: [
-                  Text('Scroll Down', style: theme.textTheme.bodySmall),
-                  const SizedBox(height: 8),
-                  const Icon(Icons.keyboard_arrow_down,
-                          color: AppColors.accentColor)
-                      .animate(
-                        onPlay: (controller) =>
-                            controller.repeat(reverse: true),
-                      )
-                      .moveY(begin: 0, end: 10, duration: 1.seconds),
-                ],
-              ),
-            ),
-          ),
-        ],
+          if (split) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(flex: 7, child: intro),
+                const SizedBox(width: 56),
+                Expanded(flex: 3, child: stats),
+              ],
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [intro, const SizedBox(height: 32), stats],
+          );
+        },
       ),
     );
   }
+}
+
+class _GridPainter extends CustomPainter {
+  const _GridPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1;
+    for (var line = 26.0; line < size.width - 12; line += 26) {
+      canvas.drawLine(Offset(line, 12), Offset(line, size.height - 12), paint);
+    }
+    for (var line = 26.0; line < size.height - 12; line += 26) {
+      canvas.drawLine(Offset(12, line), Offset(size.width - 12, line), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_GridPainter oldDelegate) => oldDelegate.color != color;
 }

@@ -1,11 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../core/constants/app_colors.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
 import '../../../core/utils/responsive_helper.dart';
 import '../../../data/models/portfolio_models.dart';
 import '../../../data/portfolio_data.dart';
 import '../common/glass_card.dart';
+import '../common/portfolio_ui.dart';
+
+class FeaturedProjectsSection extends StatelessWidget {
+  const FeaturedProjectsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const projects = PortfolioData.featured;
+    return SectionFrame(
+      lighting: const Alignment(-.38, -.86),
+      etched: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SectionHeading(
+            title: 'Featured work',
+            description:
+                'Selected cross-platform apps and the engineering behind them.',
+          ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < PortfolioLayout.split) {
+                return ResponsiveCards(
+                  maxColumns: 2,
+                  children: [
+                    for (final (index, project) in projects.indexed)
+                      Reveal(
+                        order: index % 2,
+                        child: _ProjectCard(project: project, featured: true),
+                      ),
+                  ],
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BackdropGroup(
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 7,
+                          child: Reveal(
+                            child: _ProjectCard(
+                              project: PortfolioData.zidcash,
+                              featured: true,
+                              frosted: true,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: PortfolioLayout.gap),
+                        Expanded(
+                          flex: 5,
+                          child: Reveal(
+                            order: 1,
+                            child: _ProjectCard(
+                              project: PortfolioData.ufoo,
+                              featured: true,
+                              frosted: true,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: PortfolioLayout.gap),
+                  ResponsiveCards(
+                    maxColumns: 2,
+                    children: [
+                      for (final (index, project) in projects.skip(2).indexed)
+                        Reveal(
+                          order: index % 2,
+                          child: _ProjectCard(project: project, featured: true),
+                        ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
@@ -15,304 +99,290 @@ class ProjectsSection extends StatefulWidget {
 }
 
 class _ProjectsSectionState extends State<ProjectsSection> {
-  String _selectedCategory = 'All';
-  final List<String> _categories = [
+  static const _categories = [
     'All',
+    'Education',
     'Fintech',
+    'Logistics',
+    'Ride-Hailing',
     'Transportation',
+    'E-commerce',
+    'Utilities',
   ];
+  String _category = 'All';
 
-  List<Project> get _filteredProjects {
-    if (_selectedCategory == 'All') return PortfolioData.projects;
-    return PortfolioData.projects
-        .where((p) => p.category == _selectedCategory)
-        .toList();
+  @override
+  Widget build(BuildContext context) {
+    final projects = _category == 'All'
+        ? PortfolioData.projects
+        : PortfolioData.projects
+              .where((project) => project.category == _category)
+              .toList();
+    return SectionFrame(
+      lighting: const Alignment(.62, -.86),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SectionHeading(
+            title: 'All projects',
+            description: 'Browse the complete portfolio by industry.',
+          ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              for (final category in _categories)
+                ChoiceChip(
+                  label: Text(category),
+                  selected: category == _category,
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  onSelected: (selected) {
+                    if (selected) setState(() => _category = category);
+                  },
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              '${projects.length} ${projects.length == 1 ? 'project' : 'projects'}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ResponsiveCards(
+            children: [
+              for (final project in projects)
+                Reveal(
+                  key: ValueKey(project.title),
+                  duration: PortfolioLayout.filter,
+                  travel: 0,
+                  child: _ProjectCard(project: project),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
+}
+
+class _ProjectCard extends StatelessWidget {
+  const _ProjectCard({
+    required this.project,
+    this.featured = false,
+    this.frosted = false,
+  });
+
+  final Project project;
+  final bool featured;
+  final bool frosted;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDesktop = ResponsiveHelper.isDesktop(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 24),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Column(
-            children: [
-              Text(
-                'Projects',
-                style: theme.textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryColor,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Some of my recent work',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                width: 60,
-                height: 4,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primaryColor, AppColors.accentColor],
-                  ),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 48),
-
-              // Filter Chips
-              Wrap(
-                spacing: 12,
-                children: _categories.map((category) {
-                  final isSelected = _selectedCategory == category;
-                  return ChoiceChip(
-                    label: Text(category),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() => _selectedCategory = category);
-                      }
-                    },
-                    selectedColor: AppColors.accentColor,
-                    labelStyle: TextStyle(
-                      color: isSelected
-                          ? Colors.white
-                          : theme.textTheme.bodyMedium?.color,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  );
-                }).toList(),
-              ),
-
-              const SizedBox(height: 48),
-
-              // Projects Grid
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: isDesktop
-                      ? 3
-                      : (ResponsiveHelper.isTablet(context) ? 2 : 1),
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: 24,
-                  mainAxisSpacing: 24,
-                ),
-                itemCount: _filteredProjects.length,
-                itemBuilder: (context, index) {
-                  final project = _filteredProjects[index];
-                  return _buildProjectCard(context, project)
-                      .animate()
-                      .fadeIn(delay: (index * 100).ms)
-                      .slideY(begin: 0.1, end: 0);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProjectCard(BuildContext context, Project project) {
-    final theme = Theme.of(context);
     return GlassCard(
       padding: EdgeInsets.zero,
+      frosted: frosted,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Project Image Placeholder
-          Expanded(
-            flex: 3,
-            child: Container(
-              color: Colors.grey.shade200, // Placeholder
-              child: project.image != null
-                  ? Center(
-                      child: Image.asset(
-                        project
-                            .image!, // In real deploy use generic placeholder if asset missing
-                        fit: BoxFit.cover,
-                        errorBuilder: (c, e, s) => const Center(
-                          child:
-                              Icon(Icons.image, size: 50, color: Colors.grey),
-                        ),
-                      ),
-                    )
-                  : const Center(
-                      child: Icon(Icons.image, size: 50, color: Colors.grey),
-                    ),
+          if (featured)
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(PortfolioLayout.radius - 1),
+              ),
+              child: _ProjectGallery(project: project),
             ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          project.category,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: AppColors.primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      if (project.featured)
-                        const Icon(Icons.star, color: Colors.amber, size: 16),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
+          Padding(
+            padding: EdgeInsets.all(featured ? 24 : 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Label(project.category.toUpperCase()),
+                const SizedBox(height: 8),
+                Semantics(
+                  container: true,
+                  header: true,
+                  headingLevel: 3,
+                  child: WordFitText(
                     project.title,
                     style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontSize: featured ? 29 : 23,
+                      letterSpacing: -.4,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
+                ),
+                const SizedBox(height: 8),
+                Text(project.description, style: theme.textTheme.bodyLarge),
+                if (featured && project.contribution != null) ...[
+                  const SizedBox(height: 14),
+                  Text('My contribution', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 4),
                   Text(
-                    project.subtitle,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.accentColor,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    project.description,
+                    project.contribution!,
                     style: theme.textTheme.bodyMedium,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
-                  // Technologies
+                ],
+                const SizedBox(height: 15),
+                TagList(project.technologies),
+                if (project.links.isNotEmpty ||
+                    project.features.isNotEmpty) ...[
+                  const SizedBox(height: 17),
                   Wrap(
-                    spacing: 4,
-                    runSpacing: 4,
-                    children: project.technologies
-                        .take(3)
-                        .map(
-                          (t) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.withOpacity(0.3),
-                              ),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              t,
-                              style: const TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      InkWell(
-                        onTap: () async {
-                          final uri = Uri.parse(project.playStoreUrl ?? '');
-                          await launchUrl(uri);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.primaryColor.withOpacity(0.15),
-                                AppColors.accentColor.withOpacity(0.1),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColors.primaryColor.withOpacity(0.2),
-                            ),
-                          ),
-                          child: const Text(
-                            'Google Play',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (project.appStoreUrl != null)
-                        const SizedBox(width: 16),
-                      if (project.appStoreUrl != null)
-                        InkWell(
-                          onTap: () async {
-                            final uri = Uri.parse(project.appStoreUrl ?? '');
-                            await launchUrl(uri);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  AppColors.primaryColor.withOpacity(0.15),
-                                  AppColors.accentColor.withOpacity(0.1),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: AppColors.primaryColor.withOpacity(0.2),
-                              ),
-                            ),
-                            child: const Text(
-                              'App Store',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
+                      for (final link in project.links)
+                        PortfolioLink(label: link.label, url: link.url),
+                      if (project.features.isNotEmpty)
+                        TextButton(
+                          onPressed: () => _showProject(context, project),
+                          child: Text(
+                            featured ? 'Case study' : 'Project details',
                           ),
                         ),
                     ],
                   ),
                 ],
-              ),
+              ],
             ),
           ),
         ],
       ),
     );
   }
+}
+
+class _ProjectGallery extends StatefulWidget {
+  const _ProjectGallery({required this.project});
+
+  final Project project;
+
+  @override
+  State<_ProjectGallery> createState() => _ProjectGalleryState();
+}
+
+class _ProjectGalleryState extends State<_ProjectGallery> {
+  final _visibilityKey = UniqueKey();
+  bool _visible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final reduced = MediaQuery.disableAnimationsOf(context);
+    final project = widget.project;
+    final images = project.screenshots.isNotEmpty
+        ? project.screenshots
+        : [if (project.image case final image?) image];
+
+    if (images.isEmpty) return const SizedBox.shrink();
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: VisibilityDetector(
+        key: _visibilityKey,
+        onVisibilityChanged: _visible
+            ? null
+            : (info) {
+                if (mounted && !_visible && info.visibleFraction > 0) {
+                  setState(() => _visible = true);
+                }
+              },
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                colors.surfaceContainerHighest.withValues(alpha: .56),
+                colors.surface.withValues(alpha: .32),
+              ],
+            ),
+            border: Border(bottom: BorderSide(color: colors.outline)),
+          ),
+          child: !_visible
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (final (index, path) in images.indexed) ...[
+                        if (index > 0) const SizedBox(width: 12),
+                        Flexible(
+                          child: Image.asset(
+                            path,
+                            fit: BoxFit.contain,
+                            frameBuilder: (context, child, frame, synchronous) {
+                              if (reduced || synchronous) return child;
+                              return AnimatedOpacity(
+                                opacity: frame == null ? 0 : 1,
+                                duration: PortfolioLayout.fast,
+                                curve: PortfolioLayout.ease,
+                                child: child,
+                              );
+                            },
+                            semanticLabel: project.screenshots.isEmpty
+                                ? '${project.title} logo'
+                                : '${project.title} app screenshot ${index + 1}',
+                            errorBuilder: (context, error, stack) =>
+                                const SizedBox.shrink(),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+void _showProject(BuildContext context, Project project) {
+  showDialog<void>(
+    context: context,
+    animationStyle: MediaQuery.disableAnimationsOf(context)
+        ? AnimationStyle.noAnimation
+        : null,
+    builder: (context) {
+      final theme = Theme.of(context);
+      return AlertDialog(
+        scrollable: true,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
+        title: Text(project.title),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(project.description, style: theme.textTheme.bodyLarge),
+              const SizedBox(height: 16),
+              Text('How it works', style: theme.textTheme.titleMedium),
+              for (final feature in project.features)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text('•  $feature', style: theme.textTheme.bodyMedium),
+                ),
+              if (project.contribution case final contribution?) ...[
+                const SizedBox(height: 16),
+                Text('My contribution', style: theme.textTheme.titleMedium),
+                const SizedBox(height: 6),
+                Text(contribution, style: theme.textTheme.bodyMedium),
+              ],
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
 }

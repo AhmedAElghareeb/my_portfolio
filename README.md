@@ -11,10 +11,16 @@ flutter pub get
 flutter run -d chrome
 flutter analyze
 flutter test
-flutter build web --release --base-href /my_portfolio/
+flutter build web --release --base-href /my_portfolio/ --wasm --pwa-strategy=none
 ```
 
 The release build is written to `build/web`. Serve this directory under `/my_portfolio/` when checking the release locally.
+
+The release contains Skwasm and the CanvasKit JavaScript fallback. The startup HTML shows the introduction until the first Flutter frame. Returning visitors with the old Flutter service worker migrate to the browser's normal HTTP cache. Offline browsing is outside the release's support scope.
+
+## Publish to GitHub Pages
+
+Push the reviewed source to `main`, then run `./deploy_to_gh_pages.ps1` from PowerShell 7.3 or later. The script tests and builds the release, adds a deployment commit to the existing `gh-pages` history, and prints the commit to verify in the Pages workflow. Use `-UseVerifiedBuild` when `build/web` has already passed the release checks.
 
 ## Code and content
 

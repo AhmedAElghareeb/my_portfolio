@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_cubit.dart';
@@ -8,7 +9,12 @@ import 'core/utils/responsive_helper.dart';
 import 'presentation/pages/narrow_portfolio_page.dart';
 import 'routes/app_router.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  VisibilityDetectorController.instance.updateInterval = const Duration(
+    milliseconds: 90,
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

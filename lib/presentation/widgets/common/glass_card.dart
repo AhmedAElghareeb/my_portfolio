@@ -1,4 +1,4 @@
-import 'dart:ui' show ImageFilter;
+import 'dart:ui' show ImageFilter, PointerDeviceKind;
 
 import 'package:flutter/material.dart';
 
@@ -12,6 +12,7 @@ class GlassCard extends StatefulWidget {
     this.radius = PortfolioLayout.radius,
     this.interactive = true,
     this.frosted = false,
+    this.lift = false,
   });
 
   final Widget child;
@@ -19,6 +20,7 @@ class GlassCard extends StatefulWidget {
   final double radius;
   final bool interactive;
   final bool frosted;
+  final bool lift;
 
   @override
   State<GlassCard> createState() => _GlassCardState();
@@ -28,6 +30,7 @@ class _GlassCardState extends State<GlassCard> {
   static final _blur = ImageFilter.blur(sigmaX: 7, sigmaY: 7);
   bool _hovered = false;
   bool _focused = false;
+  bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,87 +41,88 @@ class _GlassCardState extends State<GlassCard> {
     final reduced = MediaQuery.disableAnimationsOf(context);
     final useFrost = widget.frosted && _withinFrostBudget(context);
 
-    final surface = Stack(
-      fit: StackFit.passthrough,
-      children: [
-        if (useFrost) Positioned.fill(child: _frost(radius)),
-        TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0, end: _hovered || _focused ? 1 : 0),
-          duration: reduced ? Duration.zero : PortfolioLayout.fast,
-          curve: PortfolioLayout.ease,
-          child: Padding(
-            padding: widget.padding.add(
-              rail ? const EdgeInsets.only(bottom: 1) : const EdgeInsets.all(1),
-            ),
-            child: widget.child,
-          ),
-          builder: (context, emphasis, child) {
-            final rim = Color.lerp(
-              colors.outline,
-              accent,
-              .18 + .30 * emphasis,
-            )!;
-            final tint = Color.lerp(
-              colors.surfaceContainerHighest,
-              accent,
-              .07 + .07 * emphasis,
-            )!;
-            final edge = BorderSide(color: rim.withValues(alpha: .86));
-            return DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: radius,
-                border: rail
-                    ? Border(bottom: edge)
-                    : Border.fromBorderSide(edge),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: const [0, .49, 1],
-                  colors: [
-                    tint.withValues(alpha: .64),
-                    colors.surface.withValues(alpha: .76),
-                    colors.surface.withValues(alpha: .89),
-                  ],
-                ),
-                boxShadow: [
-                  if (emphasis > 0)
-                    BoxShadow(
-                      color: colors.shadow.withValues(alpha: .19 * emphasis),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
-                    ),
-                ],
-              ),
-              child: child,
-            );
-          },
+    final frost = useFrost ? _frost(radius) : null;
+    final surface = TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: _hovered || _focused || _pressed ? 1 : 0),
+      duration: reduced ? Duration.zero : PortfolioLayout.fast,
+      curve: PortfolioLayout.ease,
+      child: Padding(
+        padding: widget.padding.add(
+          rail ? const EdgeInsets.only(bottom: 1) : const EdgeInsets.all(1),
         ),
-        if (widget.radius > 0)
-          Positioned(
-            top: 0,
-            left: widget.radius,
-            right: widget.radius,
-            height: 1,
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    stops: const [0, .25, .82],
-                    colors: [
-                      accent.withValues(alpha: 0),
-                      accent.withValues(alpha: .32),
-                      accent.withValues(alpha: 0),
-                    ],
+        child: widget.child,
+      ),
+      builder: (context, emphasis, child) {
+        final rim = Color.lerp(colors.outline, accent, .18 + .30 * emphasis)!;
+        final tint = Color.lerp(
+          colors.surfaceContainerHighest,
+          accent,
+          .07 + .07 * emphasis,
+        )!;
+        final edge = BorderSide(color: rim.withValues(alpha: .86));
+        final front = DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            border: rail ? Border(bottom: edge) : Border.fromBorderSide(edge),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: const [0, .49, 1],
+              colors: [
+                tint.withValues(alpha: .64),
+                colors.surface.withValues(alpha: .76),
+                colors.surface.withValues(alpha: .89),
+              ],
+            ),
+            boxShadow: [
+              if (emphasis > 0)
+                BoxShadow(
+                  color: colors.shadow.withValues(alpha: .19 * emphasis),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+            ],
+          ),
+          child: child,
+        );
+        final layers = Stack(
+          fit: StackFit.passthrough,
+          children: [
+            if (frost != null) Positioned.fill(child: frost),
+            front,
+            if (!rail)
+              Positioned(
+                top: 0,
+                left: widget.radius,
+                right: widget.radius,
+                height: 1,
+                child: IgnorePointer(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        stops: const [0, .25, .82],
+                        colors: [
+                          accent.withValues(alpha: 0),
+                          accent.withValues(alpha: .32 + .26 * emphasis),
+                          accent.withValues(alpha: 0),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-      ],
+          ],
+        );
+        return Transform.translate(
+          offset: Offset(0, widget.lift && !reduced ? -3 * emphasis : 0),
+          transformHitTests: false,
+          child: layers,
+        );
+      },
     );
 
     if (!widget.interactive) return surface;
-    return MouseRegion(
+    final interactiveSurface = MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: Focus(
@@ -130,6 +134,20 @@ class _GlassCardState extends State<GlassCard> {
         },
         child: surface,
       ),
+    );
+    if (!widget.lift) return interactiveSurface;
+    return Listener(
+      onPointerDown: (event) {
+        if (event.kind == PointerDeviceKind.touch)
+          setState(() => _pressed = true);
+      },
+      onPointerUp: (_) {
+        if (_pressed) setState(() => _pressed = false);
+      },
+      onPointerCancel: (_) {
+        if (_pressed) setState(() => _pressed = false);
+      },
+      child: interactiveSurface,
     );
   }
 

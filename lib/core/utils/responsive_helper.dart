@@ -18,7 +18,7 @@ abstract final class PortfolioLayout {
 
   static const fast = Duration(milliseconds: 160);
   static const filter = Duration(milliseconds: 240);
-  static const reveal = Duration(milliseconds: 420);
+  static const reveal = Duration(milliseconds: 540);
   static const scroll = Duration(milliseconds: 500);
   static const ease = Curves.easeOutCubic;
 

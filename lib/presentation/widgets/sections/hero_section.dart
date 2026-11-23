@@ -42,12 +42,16 @@ class HeroSection extends StatelessWidget {
             children: [
               const Reveal(
                 immediate: true,
+                initialOpacity: .76,
+                travel: 10,
                 child: Label('FLUTTER / MOBILE DEVELOPER  ·  EGYPT'),
               ),
               const SizedBox(height: 20),
               Reveal(
                 immediate: true,
                 order: 1,
+                initialOpacity: .78,
+                travel: 20,
                 child: Semantics(
                   container: true,
                   header: true,
@@ -66,6 +70,7 @@ class HeroSection extends StatelessWidget {
               Reveal(
                 immediate: true,
                 order: 2,
+                initialOpacity: .68,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 580),
                   child: Text(
@@ -77,62 +82,75 @@ class HeroSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 28),
-              Reveal(
-                immediate: true,
-                order: 3,
-                travel: 0,
-                child: Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    FilledButton(
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  Reveal(
+                    immediate: true,
+                    order: 3,
+                    initialOpacity: .82,
+                    travel: 10,
+                    child: FilledButton(
                       onPressed: onExplore,
                       child: const Text('Explore My Work'),
                     ),
-                    OutlinedButton(
+                  ),
+                  Reveal(
+                    immediate: true,
+                    order: 4,
+                    initialOpacity: .78,
+                    travel: 10,
+                    child: OutlinedButton(
                       onPressed: onContact,
                       child: const Text('Get In Touch'),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           );
 
-          final stats = Reveal(
-            immediate: true,
-            order: 2,
-            child: GlassCard(
-              padding: EdgeInsets.zero,
-              interactive: false,
-              child: CustomPaint(
-                painter: _GridPainter(colors.primary.withValues(alpha: .09)),
-                child: Padding(
-                  padding: EdgeInsets.all(split ? 28 : 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final (index, (value, label))
-                          in PortfolioData.stats.indexed) ...[
-                        if (index > 0)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Divider(height: 1),
-                          ),
-                        Text(
-                          value,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontSize: split ? 38 : 30,
-                            color: colors.primary,
-                            height: 1.12,
-                            letterSpacing: -1.2,
-                          ),
+          final stats = GlassCard(
+            padding: EdgeInsets.zero,
+            interactive: false,
+            child: CustomPaint(
+              painter: _GridPainter(colors.primary.withValues(alpha: .09)),
+              child: Padding(
+                padding: EdgeInsets.all(split ? 28 : 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final (index, (value, label))
+                        in PortfolioData.stats.indexed) ...[
+                      if (index > 0)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Divider(height: 1),
                         ),
-                        const SizedBox(height: 4),
-                        Text(label, style: theme.textTheme.bodyMedium),
-                      ],
+                      Reveal(
+                        order: index + 2,
+                        travel: 10,
+                        initialOpacity: .72,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              value,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontSize: split ? 38 : 30,
+                                color: colors.primary,
+                                height: 1.12,
+                                letterSpacing: -1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(label, style: theme.textTheme.bodyMedium),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               ),
             ),

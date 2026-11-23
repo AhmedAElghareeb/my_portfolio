@@ -79,31 +79,33 @@ class SectionHeading extends StatelessWidget {
         final headingSize = constraints.maxWidth < PortfolioLayout.compact
             ? 33.0
             : 48.0;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Semantics(
-              container: true,
-              header: true,
-              headingLevel: 2,
-              child: WordFitText(
-                title,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontSize: headingSize,
-                  letterSpacing: -1.25,
-                  height: 1.12,
+        return Reveal(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Semantics(
+                container: true,
+                header: true,
+                headingLevel: 2,
+                child: WordFitText(
+                  title,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontSize: headingSize,
+                    letterSpacing: -1.25,
+                    height: 1.12,
+                  ),
                 ),
               ),
-            ),
-            if (description case final description?) ...[
-              const SizedBox(height: 12),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Text(description, style: theme.textTheme.bodyLarge),
-              ),
+              if (description case final description?) ...[
+                const SizedBox(height: 12),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: Text(description, style: theme.textTheme.bodyLarge),
+                ),
+              ],
+              const SizedBox(height: 30),
             ],
-            const SizedBox(height: 30),
-          ],
+          ),
         );
       },
     );
@@ -331,8 +333,9 @@ class Reveal extends StatefulWidget {
     required this.child,
     this.order = 0,
     this.immediate = false,
-    this.travel = 7,
+    this.travel = 16,
     this.duration = PortfolioLayout.reveal,
+    this.initialOpacity = .58,
   });
 
   final Widget child;
@@ -340,6 +343,7 @@ class Reveal extends StatefulWidget {
   final bool immediate;
   final double travel;
   final Duration duration;
+  final double initialOpacity;
 
   @override
   State<Reveal> createState() => _RevealState();
@@ -359,26 +363,33 @@ class _RevealState extends State<Reveal> {
         end: reduced || widget.immediate || _seen ? 1 : 0,
       ),
       curve: Interval(
-        widget.order.clamp(0, 3) * .12,
+        widget.order.clamp(0, 5) * .105,
         1,
         curve: PortfolioLayout.ease,
       ),
       child: widget.child,
       builder: (context, progress, child) => Opacity(
-        opacity: reduced ? 1 : .86 + progress * .14,
+        opacity: reduced
+            ? 1
+            : widget.initialOpacity + progress * (1 - widget.initialOpacity),
         child: Transform.translate(
           offset: Offset(0, reduced ? 0 : widget.travel * (1 - progress)),
+          transformHitTests: false,
           child: child,
         ),
       ),
     );
-    if (widget.immediate) return child;
+    if (widget.immediate || reduced) return child;
     return VisibilityDetector(
       key: _visibilityKey,
       onVisibilityChanged: _seen
           ? null
           : (info) {
-              if (mounted && !_seen && info.visibleFraction > .10) {
+              if (mounted &&
+                  !_seen &&
+                  info.visibleBounds.height >=
+                      math.min(20, info.size.height * .10) &&
+                  info.visibleFraction > 0) {
                 setState(() => _seen = true);
               }
             },

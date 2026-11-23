@@ -18,29 +18,31 @@ class AboutSection extends StatelessWidget {
           const SectionHeading(title: 'About'),
           LayoutBuilder(
             builder: (context, constraints) {
-              final about = Align(
-                alignment: Alignment.topLeft,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: PortfolioLayout.proseWidth,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'I develop Flutter and Dart apps for Android and iOS. At Geexar and in freelance work, I’ve taken apps from requirements and architecture through API integration and release on Google Play and the App Store.',
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        'I use Clean and Modular Architecture to keep features maintainable as products grow. I collaborate through code reviews and agile planning, and I mentor junior mobile developers.',
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                    ],
+              final about = Reveal(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: PortfolioLayout.proseWidth,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'I develop Flutter and Dart apps for Android and iOS. At Geexar and in freelance work, I’ve taken apps from requirements and architecture through API integration and release on Google Play and the App Store.',
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 14),
+                        Text(
+                          'I use Clean and Modular Architecture to keep features maintainable as products grow. I collaborate through code reviews and agile planning, and I mentor junior mobile developers.',
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
-              const education = Reveal(child: _EducationCard());
+              const education = Reveal(order: 1, child: _EducationCard());
               if (constraints.maxWidth >= PortfolioLayout.split) {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

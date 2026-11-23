@@ -3,6 +3,7 @@
 <head>
   <base href="$FLUTTER_BASE_HREF">
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Ahmed Ashraf Elghareeb is a Flutter and mobile developer in Egypt. Explore production iOS and Android work in fintech, logistics, ride-hailing, and education.">
   <meta name="theme-color" content="#0d1118">
   <link rel="canonical" href="https://ahmedaelghareeb.github.io/my_portfolio/">
@@ -10,17 +11,48 @@
   <meta property="og:title" content="Ahmed Elghareeb | Flutter &amp; Mobile Developer">
   <meta property="og:description" content="Production Flutter apps, selected case studies, and mobile engineering experience.">
   <meta property="og:url" content="https://ahmedaelghareeb.github.io/my_portfolio/">
-  <meta property="og:image" content="https://ahmedaelghareeb.github.io/my_portfolio/icons/Icon-512.png">
-  <meta property="og:image:alt" content="Ahmed Elghareeb portfolio mark">
+  <meta property="og:image" content="https://ahmedaelghareeb.github.io/my_portfolio/icons/ae-v3-512.png">
+  <meta property="og:image:alt" content="Ahmed Elghareeb AE monogram">
   <meta name="twitter:card" content="summary">
   <meta name="mobile-web-app-capable" content="yes">
   <title>Ahmed Elghareeb | Flutter &amp; Mobile Developer</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=ae3">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/ae-v3-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/ae-v3-32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/ae-v3-48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/ae-v3-apple-180.png">
+  <link rel="manifest" href="manifest.json?v=ae3">
+  <style>
+    html, body { margin: 0; background: #0d1118; color: #f1f5fb; }
+    #portfolio-startup { position: fixed; inset: 0; overflow: auto; font-family: system-ui, sans-serif;
+      background: radial-gradient(ellipse at 75% 10%, #182b39, #0d1118 55%); }
+    #portfolio-startup > div { max-width: 1280px; margin: auto; padding: 0 5vw; }
+    #portfolio-startup header { display: flex; align-items: center; min-height: 64px; font-weight: 700; }
+    #portfolio-startup section { margin: clamp(30px, 8vh, 76px) 0 36px; max-width: 580px; }
+    #portfolio-startup h1 { margin: .35em 0; font-size: clamp(2rem, 6vw, 4.75rem); line-height: 1.05; letter-spacing: -.045em; }
+    #portfolio-startup p { line-height: 1.55; color: #acbbcf; }
+    #portfolio-startup .role { color: #91dcff; font-size: .8rem; letter-spacing: .08em; font-weight: 700; }
+    #portfolio-startup .compact { display: none; }
+    @media (max-width: 319px) {
+      #portfolio-startup header .full, #portfolio-startup h1 .full { display: none; }
+      #portfolio-startup .compact { display: inline; }
+      #portfolio-startup h1 { font-size: clamp(1rem, 10vw, 2rem); }
+    }
+  </style>
 </head>
 <body>
+  <main id="portfolio-startup" aria-label="Portfolio introduction">
+    <div>
+      <header><span class="full">Ahmed Elghareeb</span><span class="compact" aria-label="Ahmed Elghareeb">AE</span></header>
+      <section>
+        <p class="role">FLUTTER / MOBILE DEVELOPER · EGYPT</p>
+        <h1><span class="full">Ahmed Ashraf Elghareeb</span><span class="compact">Ahmed Elghareeb</span></h1>
+        <p>I build and ship Flutter apps for iOS and Android, from digital wallets and ride-hailing to logistics and commerce. My work spans app architecture, service integration, and store releases.</p>
+        <p id="portfolio-startup-error" hidden>The interactive portfolio could not start. <a href="">Reload the page</a> to try again.</p>
+      </section>
+    </div>
+  </main>
   <noscript>Ahmed Ashraf Elghareeb is a Flutter and mobile developer in Egypt. Enable JavaScript to browse the portfolio, or email ahmed.elghareeb1166@gmail.com.</noscript>
-  <script src="flutter_bootstrap.js" async></script>
+  <script>{{flutter_bootstrap_js}}</script>
 </body>
 </html>

@@ -41,6 +41,27 @@ class _HomePageState extends State<HomePage> {
     for (final section in _Section.values)
       section: FocusNode(debugLabel: section.label, skipTraversal: true),
   };
+  bool _sectionsReady = false;
+  _Section? _pendingSection;
+  _Section _activeSection = _Section.home;
+
+  @override
+  void initState() {
+    super.initState();
+    // Let the first frame paint the usable navigation and Hero before laying out
+    // the rest of the portfolio. Anchor taps still work during that first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() => _sectionsReady = true);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (_pendingSection case final pending?) {
+          _pendingSection = null;
+          _navigate(pending);
+        }
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -53,7 +74,12 @@ class _HomePageState extends State<HomePage> {
 
   void _navigate(_Section section) {
     final target = _anchors[section]?.currentContext;
-    if (target == null) return;
+    if (target == null) {
+      _pendingSection = section;
+      return;
+    }
+    _pendingSection = null;
+    if (_activeSection != section) setState(() => _activeSection = section);
     _focusNodes[section]?.requestFocus();
     Scrollable.ensureVisible(
       target,
@@ -97,23 +123,25 @@ class _HomePageState extends State<HomePage> {
                         onContact: () => _navigate(_Section.contact),
                       ),
                     ),
-                    _anchor(_Section.work, const FeaturedProjectsSection()),
-                    _anchor(_Section.projects, const ProjectsSection()),
-                    ColoredBox(
-                      color: Color.lerp(
-                        theme.scaffoldBackgroundColor,
-                        theme.colorScheme.surface,
-                        .62,
-                      )!,
-                      child: _anchor(
-                        _Section.experience,
-                        const ExperienceSection(),
+                    if (_sectionsReady) ...[
+                      _anchor(_Section.work, const FeaturedProjectsSection()),
+                      _anchor(_Section.projects, const ProjectsSection()),
+                      ColoredBox(
+                        color: Color.lerp(
+                          theme.scaffoldBackgroundColor,
+                          theme.colorScheme.surface,
+                          .62,
+                        )!,
+                        child: _anchor(
+                          _Section.experience,
+                          const ExperienceSection(),
+                        ),
                       ),
-                    ),
-                    _anchor(_Section.expertise, const SkillsSection()),
-                    _anchor(_Section.about, const AboutSection()),
-                    _anchor(_Section.contact, const ContactSection()),
-                    const FooterSection(),
+                      _anchor(_Section.expertise, const SkillsSection()),
+                      _anchor(_Section.about, const AboutSection()),
+                      _anchor(_Section.contact, const ContactSection()),
+                      const FooterSection(),
+                    ],
                   ],
                 ),
               ),
@@ -167,11 +195,20 @@ class _HomePageState extends State<HomePage> {
                 ),
                 if (desktopNav)
                   for (final section in _Section.values.skip(1))
-                    TextButton(
-                      onPressed: () => _navigate(section),
-                      child: Text(
-                        section.label,
-                        style: TextStyle(color: foreground),
+                    Semantics(
+                      selected: section == _activeSection,
+                      child: TextButton(
+                        onPressed: () => _navigate(section),
+                        style: section == _activeSection
+                            ? TextButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary
+                                    .withValues(alpha: .13),
+                              )
+                            : null,
+                        child: Text(
+                          section.label,
+                          style: TextStyle(color: foreground),
+                        ),
                       ),
                     ),
                 PortfolioThemeButton(color: foreground),
@@ -247,6 +284,7 @@ class _HomePageState extends State<HomePage> {
               ),
               for (final section in _Section.values)
                 ListTile(
+                  selected: section == _activeSection,
                   title: WordFitText(section.label),
                   onTap: () => Navigator.of(context).pop(section),
                 ),

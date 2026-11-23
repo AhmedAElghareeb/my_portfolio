@@ -153,11 +153,12 @@ class _ProjectsSectionState extends State<ProjectsSection> {
           const SizedBox(height: 16),
           ResponsiveCards(
             children: [
-              for (final project in projects)
+              for (final (index, project) in projects.indexed)
                 Reveal(
                   key: ValueKey(project.title),
                   duration: PortfolioLayout.filter,
-                  travel: 0,
+                  order: index % 3,
+                  travel: 8,
                   child: _ProjectCard(project: project),
                 ),
             ],
@@ -186,6 +187,7 @@ class _ProjectCard extends StatelessWidget {
     return GlassCard(
       padding: EdgeInsets.zero,
       frosted: frosted,
+      lift: featured,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -268,6 +270,7 @@ class _ProjectGallery extends StatefulWidget {
 class _ProjectGalleryState extends State<_ProjectGallery> {
   final _visibilityKey = UniqueKey();
   bool _visible = false;
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -304,35 +307,48 @@ class _ProjectGalleryState extends State<_ProjectGallery> {
           ),
           child: !_visible
               ? null
-              : Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (final (index, path) in images.indexed) ...[
-                        if (index > 0) const SizedBox(width: 12),
-                        Flexible(
-                          child: Image.asset(
-                            path,
-                            fit: BoxFit.contain,
-                            frameBuilder: (context, child, frame, synchronous) {
-                              if (reduced || synchronous) return child;
-                              return AnimatedOpacity(
-                                opacity: frame == null ? 0 : 1,
-                                duration: PortfolioLayout.fast,
-                                curve: PortfolioLayout.ease,
-                                child: child,
-                              );
-                            },
-                            semanticLabel: project.screenshots.isEmpty
-                                ? '${project.title} logo'
-                                : '${project.title} app screenshot ${index + 1}',
-                            errorBuilder: (context, error, stack) =>
-                                const SizedBox.shrink(),
-                          ),
+              : MouseRegion(
+                  onEnter: (_) => setState(() => _hovered = true),
+                  onExit: (_) => setState(() => _hovered = false),
+                  child: AnimatedScale(
+                    scale: !reduced && _hovered ? 1.025 : 1,
+                    duration: reduced ? Duration.zero : PortfolioLayout.filter,
+                    curve: PortfolioLayout.ease,
+                    child: RepaintBoundary(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for (final (index, path) in images.indexed) ...[
+                              if (index > 0) const SizedBox(width: 12),
+                              Flexible(
+                                child: Image.asset(
+                                  path,
+                                  fit: BoxFit.contain,
+                                  frameBuilder:
+                                      (context, child, frame, synchronous) {
+                                        if (reduced || synchronous)
+                                          return child;
+                                        return AnimatedOpacity(
+                                          opacity: frame == null ? 0 : 1,
+                                          duration: PortfolioLayout.fast,
+                                          curve: PortfolioLayout.ease,
+                                          child: child,
+                                        );
+                                      },
+                                  semanticLabel: project.screenshots.isEmpty
+                                      ? '${project.title} logo'
+                                      : '${project.title} app screenshot ${index + 1}',
+                                  errorBuilder: (context, error, stack) =>
+                                      const SizedBox.shrink(),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
-                      ],
-                    ],
+                      ),
+                    ),
                   ),
                 ),
         ),

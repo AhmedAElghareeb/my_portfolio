@@ -24,17 +24,20 @@ class ContactSection extends StatelessWidget {
               description:
                   'For Flutter roles, mobile product work, or engineering collaboration, send me an email.',
             ),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                PortfolioLink(
-                  label: 'Email Ahmed',
-                  url: 'mailto:${PortfolioData.email}',
-                ),
-                PortfolioLink(label: 'LinkedIn', url: PortfolioData.linkedin),
-                PortfolioLink(label: 'GitHub', url: PortfolioData.github),
-              ],
+            Reveal(
+              order: 1,
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  PortfolioLink(
+                    label: 'Email Ahmed',
+                    url: 'mailto:${PortfolioData.email}',
+                  ),
+                  PortfolioLink(label: 'LinkedIn', url: PortfolioData.linkedin),
+                  PortfolioLink(label: 'GitHub', url: PortfolioData.github),
+                ],
+              ),
             ),
             SizedBox(height: 16),
             SelectableText(PortfolioData.email),

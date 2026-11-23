@@ -1,93 +1,49 @@
-# Ahmed Elghareeb - Flutter Developer Portfolio 🚀
+# Ahmed Elghareeb — Developer Portfolio
 
-![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
-![Responsiveness](https://img.shields.io/badge/Responsive-Mobile%20%7C%20Tablet%20%7C%20Web-orange?style=for-the-badge)
+A portfolio of Ahmed Ashraf Elghareeb’s Flutter and mobile development work. It includes published Android and iOS apps, project case studies, professional experience, and technical expertise.
 
-A stunning, modern, and fully responsive portfolio web application built with Flutter. Designed to showcase my projects, skills, and professional experience with a premium, glassmorphism-inspired UI.
+[Live Portfolio](https://ahmedaelghareeb.github.io/my_portfolio/) · [GitHub Profile](https://github.com/AhmedAElghareeb) · [LinkedIn](https://www.linkedin.com/in/ahmed-elghareeb8/)
 
-## ✨ Features
+## Website technology
 
-- **Responsive Design**: Adapts seamlessly to Desktop, Tablet, and Mobile screens.
-- **Glassmorphism UI**: Modern, translucent card designs with gradient borders.
-- **Theme System**: Dynamic Dark/Light mode toggle with persistent state.
-- **Interactive Animations**:
-  - Entrance animations (Fade, Slide, Scale).
-  - Hover effects on cards and buttons.
-  - Typewriter text effects.
-  - Animated background particles (in Dark Mode).
-- **Navigation**: Smooth scroll-to-section functionality.
-- **Project Filtering**: Filter projects by category (Fintech, E-commerce, etc.).
-- **Contact Integration**: Working contact form (via `mailto`) and social links.
-- **Downloadable CV**: Direct link to download/view Resume.
-- **PWA Ready**: Optimized for web performance.
+The production website uses **Astro static site generation**, semantic HTML, modern CSS, and TypeScript for browser interactions. GitHub Actions builds and publishes the site to GitHub Pages.
 
-## 🛠️ Tech Stack & Architecture
+- Responsive layouts, light and dark themes, and frosted-glass project cards
+- Featured case studies and a filterable project catalog
+- Entrance and scroll animations that respect reduced-motion preferences
+- Keyboard navigation, visible focus, descriptive image text, and native disclosure controls
+- Prerendered HTML, page metadata, and a sitemap
 
-This project follows a **Clean Architecture** approach to ensure scalability and maintainability.
+The Hero and project content are included in the initial HTML. Responsive WebP images and native lazy loading limit image downloads during the first visit.
 
-- **Framework**: Flutter (Web)
-- **Language**: Dart
-- **State Management**: `flutter_bloc` & `Cubit`
-- **Routing**: `go_router`
-- **Architecture Layers**:
-  - `core`: Constants, Theme, Utils (Responsive logic).
-  - `data`: Data models and static content.
-  - `presentation`: Widgets, Pages, Blocs.
-  - `routes`: Navigation configuration.
+## Repository layout
 
-### Key Packages
-- `flutter_bloc`: State management for Theme.
-- `flutter_animate`: Declarative animations.
-- `glassmorphism`: Frosted glass effects.
-- `url_launcher`: Opening external links and emails.
-- `font_awesome_flutter`: Social icons.
-- `google_fonts`: Typography (Poppins, Inter).
-- `timeline_tile` (Custom Impl): Experience timeline visualization.
+- [`astro/`](https://github.com/AhmedAElghareeb/my_portfolio/tree/astro-production/astro) on `astro-production` contains the production site.
+- [`assets/projects/`](https://github.com/AhmedAElghareeb/my_portfolio/tree/astro-production/assets/projects) contains project artwork used by the Astro build.
+- [`lib/`](lib/) and [`web/`](web/) preserve the original Flutter Web implementation for reference.
 
-## 🚀 Getting Started
+## Run locally
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/yourusername/my_portfolio.git
-    ```
+Use Node.js **22.12 or later**. Clone this repository, then run the following from the repository root.
 
-2.  **Install dependencies**
-    ```bash
-    flutter pub get
-    ```
-
-3.  **Run the application**
-    ```bash
-    flutter run -d chrome
-    ```
-
-## 📂 Project Structure
-
-```
-lib/
-├── core/
-│   ├── constants/    # App colors, strings
-│   ├── theme/        # Light/Dark theme data, Cubit
-│   └── utils/        # Responsive helpers
-├── data/
-│   ├── models/       # Data classes (Project, Experience)
-│   └── portfolio_data.dart  # Static data content
-├── presentation/
-│   ├── pages/        # Main screens (HomePage)
-│   └── widgets/      # Reusable widgets & Sections
-│       ├── common/   # Buttons, GlassCard
-│       └── sections/ # Hero, About, Projects, etc.
-└── routes/           # AppRouter configuration
+```sh
+git switch astro-production
+cd astro
+npm ci
+npm run dev
 ```
 
-## 📬 Contact
+Open [the local portfolio](http://localhost:4321/my_portfolio/).
 
-**Ahmed Ashraf Elghareeb** - Flutter Developer
+From `astro/`, build the static site and run the tests against the generated output.
 
-- **LinkedIn**: [Ahmed Elghareeb](https://www.linkedin.com/in/ahmed-elghareeb8/)
-- **Email**: ahmed.elghareeb1166@gmail.com
-- **WhatsApp**: [+201156750391](https://wa.me/+201156750391)
+```sh
+npm run build
+npm test
+```
 
----
-*Built with 💙 using Flutter*
+The build writes to `astro/dist/`. Preview it locally with `npm run preview` and open the same local URL.
+
+## Deployment
+
+GitHub Actions publishes the Astro build from `astro-production` to GitHub Pages under **`/my_portfolio/`**. The repository retains the previous Flutter release for rollback. See the [Pages workflow](.github/workflows/astro-pages.yml), [workflow runs](https://github.com/AhmedAElghareeb/my_portfolio/actions/workflows/astro-pages.yml), and [release and rollback runbook](ASTRO-PAGES-RELEASE.md).

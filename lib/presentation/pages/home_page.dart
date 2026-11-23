@@ -41,25 +41,42 @@ class _HomePageState extends State<HomePage> {
     for (final section in _Section.values)
       section: FocusNode(debugLabel: section.label, skipTraversal: true),
   };
-  bool _sectionsReady = false;
+  late final _hero = HeroSection(
+    onExplore: () => _navigate(_Section.work),
+    onContact: () => _navigate(_Section.contact),
+  );
+  int _mountedThrough = _Section.home.index;
   _Section? _pendingSection;
+  bool _sectionFrameScheduled = false;
   _Section _activeSection = _Section.home;
 
   @override
   void initState() {
     super.initState();
-    // Let the first frame paint the usable navigation and Hero before laying out
-    // the rest of the portfolio. Anchor taps still work during that first frame.
+    _scheduleSectionFrame();
+  }
+
+  void _scheduleSectionFrame() {
+    if (_sectionFrameScheduled) return;
+    _sectionFrameScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _sectionFrameScheduled = false;
       if (!mounted) return;
-      setState(() => _sectionsReady = true);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        if (_pendingSection case final pending?) {
-          _pendingSection = null;
-          _navigate(pending);
-        }
+      final pending = _pendingSection;
+      if (pending != null && _anchors[pending]?.currentContext != null) {
+        _navigate(pending);
+      }
+      if (_mountedThrough == _Section.contact.index) return;
+
+      // Append below the existing layout so early scrolling keeps its offset.
+      // A navigation request mounts through its destination on the next frame.
+      final next = _mountedThrough + 1;
+      setState(() {
+        _mountedThrough = pending != null && pending.index > next
+            ? pending.index
+            : next;
       });
+      _scheduleSectionFrame();
     });
   }
 
@@ -76,6 +93,7 @@ class _HomePageState extends State<HomePage> {
     final target = _anchors[section]?.currentContext;
     if (target == null) {
       _pendingSection = section;
+      _scheduleSectionFrame();
       return;
     }
     _pendingSection = null;
@@ -116,16 +134,12 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _anchor(
-                      _Section.home,
-                      HeroSection(
-                        onExplore: () => _navigate(_Section.work),
-                        onContact: () => _navigate(_Section.contact),
-                      ),
-                    ),
-                    if (_sectionsReady) ...[
+                    _anchor(_Section.home, _hero),
+                    if (_mountedThrough >= _Section.work.index)
                       _anchor(_Section.work, const FeaturedProjectsSection()),
+                    if (_mountedThrough >= _Section.projects.index)
                       _anchor(_Section.projects, const ProjectsSection()),
+                    if (_mountedThrough >= _Section.experience.index)
                       ColoredBox(
                         color: Color.lerp(
                           theme.scaffoldBackgroundColor,
@@ -137,8 +151,11 @@ class _HomePageState extends State<HomePage> {
                           const ExperienceSection(),
                         ),
                       ),
+                    if (_mountedThrough >= _Section.expertise.index)
                       _anchor(_Section.expertise, const SkillsSection()),
+                    if (_mountedThrough >= _Section.about.index)
                       _anchor(_Section.about, const AboutSection()),
+                    if (_mountedThrough >= _Section.contact.index) ...[
                       _anchor(_Section.contact, const ContactSection()),
                       const FooterSection(),
                     ],

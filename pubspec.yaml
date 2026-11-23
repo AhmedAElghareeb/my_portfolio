@@ -26,7 +26,8 @@ flutter:
     - assets/projects/
     - assets/projects/screens/
     - assets/fonts/Manrope-OFL.txt
+    - assets/fonts/Manrope.ttf
   fonts:
     - family: Manrope
       fonts:
-        - asset: assets/fonts/Manrope.ttf
+        - asset: assets/fonts/Manrope.woff2

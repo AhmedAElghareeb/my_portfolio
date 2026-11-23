@@ -76,6 +76,49 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('Below-fold sections append without moving the Hero', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      Builder(
+        builder: (context) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: const MyApp(),
+        ),
+      ),
+    );
+    final hero = find.text('Explore My Work');
+    final initial = tester.getTopLeft(hero);
+    expect(find.text('Featured work'), findsNothing);
+
+    await tester.pump();
+    expect(find.text('Featured work'), findsOneWidget);
+    expect(find.text('All projects'), findsNothing);
+
+    await tester.pumpAndSettle();
+    expect(find.text('Get in touch'), findsOneWidget);
+    expect(tester.getTopLeft(hero), initial);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('An early Contact tap mounts through the destination', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await tester.pumpWidget(const MyApp());
+    expect(find.text('Get in touch'), findsNothing);
+
+    await tester.tapAt(tester.getCenter(find.text('Get In Touch')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Get in touch').hitTestable(), findsOneWidget);
+    expect(find.text('All projects'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   test('Versioned browser and manifest icons have the advertised formats', () {
     final html = File('web/index.html').readAsStringSync();
     final manifest =

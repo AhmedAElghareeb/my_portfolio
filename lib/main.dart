@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             return MaterialApp.router(
               title: 'Ahmed Elghareeb | Flutter & Mobile Developer',
               debugShowCheckedModeBanner: false,
-              theme: AppTheme.lightTheme,
+              theme: themeMode == ThemeMode.dark ? null : AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
               themeMode: themeMode,
               themeAnimationDuration: disableAnimations

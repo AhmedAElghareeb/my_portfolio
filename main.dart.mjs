@@ -5539,6 +5539,7 @@ class CompiledApp {
 "checkmarkAnimation",
 "Featured work",
 "Selected cross-platform apps and the engineering behind them.",
+"_hero",
 "FLUTTER / MOBILE DEVELOPER  ·  EGYPT",
 "Ahmed Ashraf Elghareeb",
 "I build and ship Flutter apps for iOS and Android, from digital wallets and ride-hailing to logistics and commerce. My work spans app architecture, service integration, and store releases.",

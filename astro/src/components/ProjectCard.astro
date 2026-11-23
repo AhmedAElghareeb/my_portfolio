@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Project } from '../data/portfolio';
+
+interface Props {
+  project: Project;
+  featured?: boolean;
+  position?: number;
+}
+
+const { project, featured = false, position = 0 } = Astro.props;
+const sources = import.meta.glob<ImageMetadata>('../../../assets/projects/**/*.{png,jpg,webp}', {
+  eager: true,
+  import: 'default',
+});
+const captions: Record<string, string> = {
+  'zidcash.webp': 'Zidcash account registration screen',
+  'zidcash-card.webp': 'Zidcash money transfer screen',
+  'ufoo.webp': 'UFOO language selection screen',
+  'ufoo-map.webp': 'UFOO sign-in verification screen',
+  'geta.jpg': 'Geta customer app interface',
+  'core-team.jpg': 'Core Team SmartHub staff app interface',
+  'p2p.webp': 'P2P Syria wallet app interface',
+  'gebal.png': 'Gebal Alrwasay app logo',
+};
+
+const paths = project.screenshots.length ? project.screenshots : project.image ? [project.image] : [];
+const images = featured ? paths.map((path) => {
+  const source = sources[`../../../${path}`];
+  if (!source) throw new Error(`Missing portfolio asset: ${path}`);
+  return { source, alt: captions[path.split('/').at(-1)!] ?? `${project.title} app screenshot` };
+}) : [];
+const id = `${featured ? 'featured' : 'project'}-${project.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '')}`;
+const hasDetails = Boolean(project.features.length || (project.contribution && !featured));
+---
+
+<article class:list={['glass', 'project-card', featured ? 'featured-card' : 'catalog-card']}
+  data-project={!featured ? project.category : undefined} data-reveal aria-labelledby={id}>
+  {images.length > 0 && (
+    <div class:list={['project-media', { 'project-media--logo': !project.screenshots.length, 'project-media--lead': position < 2 }]}
+      data-tone={position % 3}>
+      <div class="project-media__frames">
+        {images.map(({ source, alt }) => (
+          <Image src={source} alt={alt} format="webp" quality={85}
+            width={source.width} height={source.height}
+            widths={[...new Set([Math.min(144, source.width), Math.min(220, source.width), source.width])]}
+            sizes={project.screenshots.length ? '(max-width: 480px) 126px, (max-width: 800px) 164px, 214px' : '140px'}
+            loading="lazy" decoding="async" />
+        ))}
+      </div>
+    </div>
+  )}
+  <div class="project-card__body">
+    <p class="eyebrow project-card__category">{project.category}</p>
+    <h3 id={id}>{project.title}</h3>
+    <p class="project-card__description">{project.description}</p>
+    {featured && project.contribution && (
+      <div class="contribution"><b>My contribution</b><p>{project.contribution}</p></div>
+    )}
+    <ul class="tags" aria-label="Technologies" role="list">
+      {project.technologies.map((technology) => <li>{technology}</li>)}
+    </ul>
+    {(project.links.length > 0 || hasDetails) && (
+      <div class="project-card__actions">
+        {project.links.length > 0 && (
+          <div class="project-links">
+            {project.links.map(({ label, url }) => (
+              <a class="store-link" href={url} target="_blank" rel="noopener" aria-label={`${project.title} — ${label}`}>
+                {label}<span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
+        )}
+        {hasDetails && (
+          <details class="project-details">
+            <summary>{featured ? 'Case study' : 'Project details'}<span aria-hidden="true" class="disclosure-mark"></span></summary>
+            <div class="project-details__content">
+              {project.features.length > 0 && (
+                <div><b>How it works</b><ul>{project.features.map((feature) => <li>{feature}</li>)}</ul></div>
+              )}
+              {!featured && project.contribution && (
+                <div class="contribution"><b>My contribution</b><p>{project.contribution}</p></div>
+              )}
+            </div>
+          </details>
+        )}
+      </div>
+    )}
+  </div>
+</article>

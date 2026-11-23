@@ -1,0 +1,184 @@
+---
+import ProjectCard from '../components/ProjectCard.astro';
+import { categories, featuredProjects, portfolio, profile } from '../data/portfolio';
+import fontUrl from '../assets/manrope-latin.woff2?url';
+import '../styles/site.css';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const local = (path: string) => `${base}/${path}`;
+const canonical = new URL(local(''), Astro.site);
+const title = 'Ahmed Elghareeb | Flutter & Mobile Developer';
+const description = 'Ahmed Ashraf Elghareeb is a Flutter and mobile developer in Egypt. Explore production iOS and Android work in fintech, logistics, ride-hailing, and education.';
+const logo = local('icons/ae-v3-192.png');
+const socialImage = new URL(local('icons/ae-v3-512.png'), Astro.site);
+const words = portfolio.name.split(' ');
+const lastName = words.pop();
+const givenNames = words.join(' ');
+const shortName = `${words[0]} ${lastName}`;
+const navigation = [
+  ['work', 'Work'], ['experience', 'Experience'], ['expertise', 'Expertise'],
+  ['projects', 'Projects'], ['about', 'About'], ['contact', 'Contact'],
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b111b" />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href={local('favicon.ico')} sizes="any" />
+    <link rel="icon" href={local('icons/ae-v3-16.png')} type="image/png" sizes="16x16" />
+    <link rel="icon" href={local('icons/ae-v3-32.png')} type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" sizes="180x180" href={local('icons/ae-v3-apple-180.png')} />
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={socialImage.href} />
+    <meta property="og:image:alt" content="Ahmed Elghareeb AE monogram" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage.href} />
+    <script is:inline>
+      try { if (localStorage.getItem('ae-portfolio-theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch {}
+    </script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="topbar">
+      <div class="wrap topbar__inner">
+        <a href="#top" class="brand" aria-label={`${shortName}, home`}>
+          <img src={logo} width="34" height="34" alt="" decoding="async" />
+          <span>{shortName}</span>
+        </a>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          {navigation.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+        </nav>
+        <div class="topbar__actions">
+          <button type="button" class="icon-button" data-theme-button aria-label="Switch to light theme" hidden><span class="theme-icon" aria-hidden="true"></span></button>
+          <details class="mobile-menu" data-menu>
+            <summary class="icon-button" aria-label="Navigation menu"><span class="menu-icon" aria-hidden="true"></span></summary>
+            <nav aria-label="Mobile navigation" class="mobile-menu__panel glass">
+              {navigation.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}
+            </nav>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="wrap hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow hero__role entrance" style="--order:0"><span aria-hidden="true"></span>{profile.role} · {profile.location}</p>
+            <h1 class="hero__title entrance" id="hero-title" style="--order:1"><span>{givenNames}</span> <span>{lastName}</span></h1>
+            <p class="hero__intro entrance" style="--order:2">{profile.introduction}</p>
+            <div class="actions entrance" style="--order:3">
+              <a class="button button--main" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
+              <a class="button" href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <dl class="stats glass entrance" style="--order:2" aria-label="Experience highlights">
+            {portfolio.stats.map(({ value, label }, index) => (
+              <div class:list={['stat', { 'stat--lead': index === 0 }]}>
+                <dt>{label}</dt><dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section class="section wrap" id="work" aria-labelledby="work-title">
+        <div class="section-heading section-heading--split" data-reveal>
+          <h2 id="work-title">Featured work</h2>
+          <p>Selected cross-platform apps and the engineering behind them.</p>
+        </div>
+        <div class="bento">
+          {featuredProjects.map((project, position) => <ProjectCard project={project} featured position={position} />)}
+        </div>
+      </section>
+
+      <section class="section wrap" id="experience" aria-labelledby="experience-title">
+        <div class="section-heading" data-reveal><h2 id="experience-title">Professional experience</h2></div>
+        <ol class="timeline" role="list">
+          {portfolio.experiences.map((entry) => (
+            <li class="timeline__entry" data-reveal>
+              <div class="timeline__identity"><p class="eyebrow">{entry.period}</p><h3>{entry.company}</h3></div>
+              <div class="timeline__body"><h4>{entry.role}</h4><ul>{entry.description.map((line) => <li>{line}</li>)}</ul></div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="section wrap" id="expertise" aria-labelledby="expertise-title">
+        <div class="section-heading" data-reveal><h2 id="expertise-title">Technical expertise</h2></div>
+        <div class="expertise-grid">
+          {portfolio.skills.map((category) => (
+            <article class="glass expertise-card" data-reveal>
+              <h3>{category.title}</h3>
+              <p>{category.description}</p>
+              <ul class="tags" aria-label="Technologies" role="list">{category.skills.map((skill) => <li>{skill}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section wrap" id="projects" aria-labelledby="projects-title">
+        <div class="section-heading section-heading--split" data-reveal>
+          <h2 id="projects-title">All projects</h2>
+          <p>Browse the complete portfolio by industry.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filter projects by industry" data-filters hidden>
+          {categories.map((category) => <button type="button" data-category={category} aria-pressed={category === 'All'}>{category}</button>)}
+        </div>
+        <p class="project-count" role="status" data-project-count>{portfolio.projects.length} projects</p>
+        <div class="catalog-grid" data-catalog>
+          {portfolio.projects.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </section>
+
+      <div class="wrap profile-grid">
+        <section class="section profile-section" id="about" aria-labelledby="about-title" data-reveal>
+          <div class="section-heading"><h2 id="about-title">About</h2></div>
+          <div class="prose">{profile.about.map((paragraph) => <p>{paragraph}</p>)}</div>
+        </section>
+        <section class="section profile-section" id="education" aria-labelledby="education-title" data-reveal>
+          <div class="section-heading"><h2 id="education-title">Education</h2></div>
+          <div class="glass education-card">
+            <p class="eyebrow">{profile.education.period}</p>
+            <h3>{profile.education.degree}</h3>
+            <p>{profile.education.institution}</p>
+            <p>{profile.education.detail}</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="section wrap" id="contact" aria-labelledby="contact-title">
+        <div class="glass contact-card" data-reveal>
+          <div>
+            <h2 id="contact-title">Get in touch</h2>
+            <p>{profile.contact}</p>
+            <a class="email-link" href={`mailto:${portfolio.email}`}>{portfolio.email}</a>
+          </div>
+          <div class="actions">
+            <a class="button button--main" href={`mailto:${portfolio.email}`}>Email Ahmed <span aria-hidden="true">↗</span></a>
+            <a class="button" href={portfolio.linkedin} target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+            <a class="button" href={portfolio.github} target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap footer">
+      <p>{portfolio.name} · {profile.role}</p>
+      <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </footer>
+    <script>import '../scripts/portfolio';</script>
+  </body>
+</html>

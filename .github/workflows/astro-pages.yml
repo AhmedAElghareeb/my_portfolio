@@ -1,0 +1,55 @@
+name: Astro portfolio artifact
+
+on:
+  push:
+    branches: [experiment/astro-portfolio, astro-production]
+    paths: [astro/**, assets/projects/**, .github/workflows/astro-pages.yml]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the separately approved release branch to GitHub Pages
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ASTRO_TELEMETRY_DISABLED: 1
+    defaults:
+      run:
+        working-directory: astro
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: astro/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: astro/dist
+
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && github.ref == 'refs/heads/astro-production' && vars.ASTRO_PAGES_APPROVED == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

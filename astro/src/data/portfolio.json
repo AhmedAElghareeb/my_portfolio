@@ -1,0 +1,476 @@
+{
+  "name": "Ahmed Ashraf Elghareeb",
+  "email": "ahmed.elghareeb1166@gmail.com",
+  "github": "https://github.com/AhmedAElghareeb",
+  "linkedin": "https://www.linkedin.com/in/ahmed-elghareeb8/",
+  "stats": [
+    {
+      "value": "3+",
+      "label": "Years of Flutter experience"
+    },
+    {
+      "value": "12+",
+      "label": "Cross-platform apps delivered"
+    },
+    {
+      "value": "9+",
+      "label": "Flutter apps shipped at Geexar"
+    }
+  ],
+  "experiences": [
+    {
+      "company": "Geexar",
+      "role": "Mid-Level Mobile Developer",
+      "period": "July 2024 – Present",
+      "description": [
+        "Architected and shipped 9+ Flutter apps for Android and iOS, from scoping through store deployment.",
+        "Led development of Zidcash, including deposits, withdrawals, live balances, and Visa card integration.",
+        "Used Clean Architecture and BLoC/Cubit across the mobile team and integrated REST APIs, Firebase, maps, and payments."
+      ]
+    },
+    {
+      "company": "Tsquare",
+      "role": "Flutter Developer",
+      "period": "December 2023 – May 2024",
+      "description": [
+        "Developed Hadramout Hamza, a multivendor restaurant platform with live order management for 10+ vendors.",
+        "Built reusable Flutter widgets across vendor modules and translated Figma and Adobe XD designs into responsive interfaces."
+      ]
+    },
+    {
+      "company": "Freelance",
+      "role": "Mobile Developer",
+      "period": "November 2023 – Present",
+      "description": [
+        "Independently delivered 3+ production-ready Flutter apps, from architecture to store release.",
+        "Built Direct Chatting and Quran Kareem and managed requirements and feedback with clients."
+      ]
+    },
+    {
+      "company": "Al Almiya Al Hura",
+      "role": "Flutter Intern",
+      "period": "July 2023 – November 2023",
+      "description": [
+        "Ranked first among 15+ trainees.",
+        "Built Thimar and Thimar Delivery with REST APIs, BLoC, and responsive UI.",
+        "Participated in code reviews and learned Clean Architecture with senior developers."
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "title": "Mobile Engineering",
+      "description": "Cross-platform interfaces for Android and iOS.",
+      "skills": [
+        "Flutter",
+        "Dart",
+        "Responsive UI",
+        "Localization",
+        "Animation"
+      ]
+    },
+    {
+      "title": "Architecture & State Management",
+      "description": "Feature boundaries and predictable app state.",
+      "skills": [
+        "Clean Architecture",
+        "Modular Architecture",
+        "MVVM",
+        "BLoC & Cubit",
+        "SOLID",
+        "GetIt"
+      ]
+    },
+    {
+      "title": "Backend & Integrations",
+      "description": "Product flows that connect to real services.",
+      "skills": [
+        "REST APIs · Dio",
+        "Firebase · FCM",
+        "Google Maps",
+        "Payment gateways",
+        "Local storage",
+        "Social authentication"
+      ]
+    },
+    {
+      "title": "DevOps & Delivery",
+      "description": "From code review to mobile store releases.",
+      "skills": [
+        "Git & GitHub",
+        "Azure DevOps",
+        "App Store",
+        "Google Play"
+      ]
+    }
+  ],
+  "featured": [
+    "Zidcash",
+    "UFOO",
+    "Geta",
+    "Core Team – SmartHub",
+    "P2P Syria",
+    "Gebal Alrwasay"
+  ],
+  "projects": [
+    {
+      "title": "Core Team – SmartHub",
+      "category": "Education",
+      "description": "A staff app for organizing classes, attendance, assignments, exams, and academic reporting.",
+      "technologies": [
+        "Flutter",
+        "Dart"
+      ],
+      "contribution": null,
+      "features": [
+        "Manage student groups, sessions, attendance, and submissions.",
+        "Coordinate teaching assistants and review academic reports."
+      ],
+      "image": null,
+      "screenshots": [
+        "assets/projects/screens/core-team.jpg"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.hkteam.teacher"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/us/app/core-team-smarthub/id6812734640"
+        }
+      ]
+    },
+    {
+      "title": "Hussein Khaled",
+      "category": "Education",
+      "description": "A learning app for students and parents with course materials, exams, assignments, and progress tracking.",
+      "technologies": [
+        "Flutter",
+        "Dart"
+      ],
+      "contribution": null,
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.hkteam.student"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/us/app/hussein-khaled/id6812695424"
+        }
+      ]
+    },
+    {
+      "title": "Zidcash",
+      "category": "Fintech",
+      "description": "A digital wallet for deposits, withdrawals, money transfers, and virtual card payments.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "BLoC",
+        "REST APIs",
+        "Push notifications"
+      ],
+      "contribution": "Led development from deposit and withdrawal flows through real-time balances and Visa card integration.",
+      "features": [
+        "Fund a wallet and transfer money between accounts.",
+        "Review live balances and transaction history.",
+        "Manage virtual cards for online payments."
+      ],
+      "image": "assets/projects/zidcash.png",
+      "screenshots": [
+        "assets/projects/screens/zidcash.webp",
+        "assets/projects/screens/zidcash-card.webp"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.zidCach.app"
+        }
+      ]
+    },
+    {
+      "title": "Lirat Wallet",
+      "category": "Fintech",
+      "description": "A wallet for deposits, withdrawals, online payments, digital cards, and tracking transactions.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "Firebase",
+        "REST APIs",
+        "Social authentication"
+      ],
+      "contribution": "Developed wallet flows for funding, card requests, and digital purchases.",
+      "features": [],
+      "image": "assets/projects/lirat.png",
+      "screenshots": [],
+      "links": []
+    },
+    {
+      "title": "P2P Syria",
+      "category": "Fintech",
+      "description": "A multilingual financial platform for electronic currency deposits, withdrawals, and transfers.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "Firebase",
+        "BLoC",
+        "REST APIs"
+      ],
+      "contribution": "Implemented authentication, peer-to-peer transfers, live balance tracking, and transaction history.",
+      "features": [
+        "Manage electronic currency balances and review account activity.",
+        "Transfer funds to other registered users."
+      ],
+      "image": "assets/projects/p2p_syria.png",
+      "screenshots": [
+        "assets/projects/screens/p2p.webp"
+      ],
+      "links": []
+    },
+    {
+      "title": "Card App",
+      "category": "Fintech",
+      "description": "An app for virtual cards, digital payments, transfers, and transaction history.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "Clean Architecture",
+        "BLoC/Cubit",
+        "REST APIs"
+      ],
+      "contribution": null,
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": []
+    },
+    {
+      "title": "Geta",
+      "category": "Logistics",
+      "description": "A customer and driver platform for booking freight, quoting shipments, and tracking deliveries.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "BLoC/Cubit",
+        "Google Maps",
+        "Firebase",
+        "REST APIs"
+      ],
+      "contribution": "Developed both apps and integrated shipment pricing, live route tracking, maps, and status notifications.",
+      "features": [
+        "Customers choose pickup and delivery locations, request a quote, and track a shipment.",
+        "Drivers manage assigned deliveries and update shipment statuses."
+      ],
+      "image": null,
+      "screenshots": [
+        "assets/projects/screens/geta.jpg"
+      ],
+      "links": [
+        {
+          "label": "Customer · Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.geexar.getauser"
+        },
+        {
+          "label": "Customer · App Store",
+          "url": "https://apps.apple.com/om/app/geta-user/id6752566292"
+        },
+        {
+          "label": "Driver · Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.geexar.getadriver"
+        },
+        {
+          "label": "Driver · App Store",
+          "url": "https://apps.apple.com/us/app/g-driver/id6788644426"
+        }
+      ]
+    },
+    {
+      "title": "UFOO",
+      "category": "Ride-Hailing",
+      "description": "Customer and driver apps for booking, accepting, and managing rides in Saudi Arabia.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "BLoC/Cubit",
+        "Google Maps",
+        "Firebase",
+        "REST APIs"
+      ],
+      "contribution": "Developed both apps and implemented map-based destinations, OTP sign-in, localization, trip history, and notifications.",
+      "features": [
+        "Customers choose a destination, book a trip, and track their driver.",
+        "Drivers manage availability, respond to nearby ride requests, and navigate trips."
+      ],
+      "image": "assets/projects/ufoo_driver.png",
+      "screenshots": [
+        "assets/projects/screens/ufoo.webp",
+        "assets/projects/screens/ufoo-map.webp"
+      ],
+      "links": [
+        {
+          "label": "Customer · Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.ufoClient.app"
+        },
+        {
+          "label": "Customer · App Store",
+          "url": "https://apps.apple.com/eg/app/ufoo/id6748603810"
+        },
+        {
+          "label": "Driver · Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.ufoDriver.app"
+        },
+        {
+          "label": "Driver · App Store",
+          "url": "https://apps.apple.com/eg/app/ufoo-driver/id6748874649"
+        }
+      ]
+    },
+    {
+      "title": "Gebal Alrwasay",
+      "category": "Transportation",
+      "description": "A bilingual app for coordinating worker transport during the Hajj season.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "Firebase",
+        "REST APIs",
+        "Localization"
+      ],
+      "contribution": "Built the app and implemented transport requests, live tracking, and Arabic and English support.",
+      "features": [
+        "Create transport requests with pickup and destination details.",
+        "Follow request status and expected arrival."
+      ],
+      "image": "assets/projects/gebal.png",
+      "screenshots": [],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=sa.gebalAlrwasay.app"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/eg/app/id6744922960"
+        }
+      ]
+    },
+    {
+      "title": "Benaa",
+      "category": "E-commerce",
+      "description": "A building materials marketplace that connects product discovery, quotation requests, checkout, and order tracking.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "BLoC/Cubit",
+        "REST APIs",
+        "Google Maps"
+      ],
+      "contribution": null,
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": [
+        {
+          "label": "Project overview",
+          "url": "https://geexar.com/ar/portfolio/%D8%A8%D9%86%D8%A7%D8%A1/"
+        }
+      ]
+    },
+    {
+      "title": "Hadramout Hamza",
+      "category": "E-commerce",
+      "description": "A responsive Flutter web platform for browsing restaurant vendors, viewing menus, and managing orders.",
+      "technologies": [
+        "Flutter Web",
+        "Dart",
+        "REST APIs",
+        "Responsive UI"
+      ],
+      "contribution": "Built reusable interfaces across vendor modules for a platform supporting 10+ vendors.",
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": []
+    },
+    {
+      "title": "Quran Kareem",
+      "category": "Utilities",
+      "description": "A Quran reading app with chapter browsing and saved reading preferences.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "Local storage"
+      ],
+      "contribution": "Built independently as a freelance project.",
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": []
+    },
+    {
+      "title": "Direct Chatting",
+      "category": "Utilities",
+      "description": "A utility for opening a WhatsApp conversation without saving a contact.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "Deep linking",
+        "URL Launcher"
+      ],
+      "contribution": "Built independently as a freelance project.",
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": []
+    },
+    {
+      "title": "Thimar",
+      "category": "E-commerce",
+      "description": "A grocery shopping app for browsing products, managing a cart, and placing orders.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "BLoC",
+        "REST APIs",
+        "Responsive UI"
+      ],
+      "contribution": "Built during the Al Almiya Al Hura internship.",
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": [
+        {
+          "label": "Source code",
+          "url": "https://github.com/AhmedAElghareeb/Thimar_app"
+        }
+      ]
+    },
+    {
+      "title": "Thimar Delivery",
+      "category": "E-commerce",
+      "description": "A driver app for receiving grocery deliveries, updating order status, and reviewing completed work.",
+      "technologies": [
+        "Flutter",
+        "Dart",
+        "BLoC",
+        "REST APIs",
+        "Responsive UI"
+      ],
+      "contribution": "Built during the Al Almiya Al Hura internship.",
+      "features": [],
+      "image": null,
+      "screenshots": [],
+      "links": [
+        {
+          "label": "Source code",
+          "url": "https://github.com/AhmedAElghareeb/Thimar_Driver"
+        }
+      ]
+    }
+  ]
+}
